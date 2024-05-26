@@ -2,14 +2,8 @@
 session_start();
 include "db_conn.php";
 // Assuming $user_id contains the user's unique identifier
-$sql = "SELECT * FROM `user_profile` WHERE user_id = '".$_SESSION['user_id']."'";
+$sql = "SELECT * FROM `user_profile` WHERE user_id = '".$_GET['user_id']."'";
 $result = mysqli_query($conn, $sql);
-
-// Check if the user is not logged in, then redirect to login page
-if (!isset($_SESSION['username'])) {
-    header('Location: loginform.php');
-    exit;
-}
 
 if (mysqli_num_rows($result) > 0) {
     // Fetch the data
@@ -105,15 +99,6 @@ if (mysqli_num_rows($result) > 0) {
             margin-right: 10px; /* Add space between icons and text */
         }
 
-        /* Style the edit profile link */
-        .edit-profile {
-            position: absolute;
-            bottom: 20px;
-        }
-
-        .edit-profile i {
-            margin-right: 5px;
-        }
 
         /* Dark mode styles */
         body.dark-mode {
@@ -317,37 +302,6 @@ if (mysqli_num_rows($result) > 0) {
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <div class="tabs">
-                <!-- Navigation tabs -->
-                <input type="radio" id="radio-1" name="tabs" checked>
-                <label class="tab navbar-brand" for="radio-1" data-target="#profile">Profile</label>
-                <input type="radio" id="radio-2" name="tabs">
-                <label class="tab navbar-brand" for="radio-2" data-target="#education">Education</label>
-                <input type="radio" id="radio-3" name="tabs">
-                <label class="tab navbar-brand" for="radio-3" data-target="#skills">Skills</label>
-                <input type="radio" id="radio-4" name="tabs">
-                <label class="tab navbar-brand" for="radio-4" data-target="#projects">Projects</label>
-                <input type="radio" id="radio-5" name="tabs">
-                <label class="tab navbar-brand ml-auto" for="radio-5" data-target="#contact">Contact Me</label>
-                <a target="_blank" href="publicView.php?user_id=<?php echo $_SESSION['user_id']?>" ><label >Public View</label></a>
-                <span class="glider"></span>
-                <a href="logout.php" class="btn btn-danger btn-lg">Logout</a>
-            </div>
-            <!-- Dark mode toggle -->
-            <div class="dark-mode-toggle checkbox-wrapper-51">
-                <input type="checkbox" id="cbx-51">
-                <label class="toggle" for="cbx-51">
-                    <span>
-                        <svg viewBox="0 0 44 44">
-                            <path d="M22 4.54A17.46 17.46 0 1 0 39.46 22 17.46 17.46 0 0 0 22 4.54z"></path>
-                        </svg>
-                    </span>
-                </label>
-            </div>
-        </div>
-    </nav>
     <div class="container-fluid p-0">
         <section id="profile">
             <div class="row">
@@ -363,7 +317,7 @@ if (mysqli_num_rows($result) > 0) {
                             <p><i class="fas fa-phone"></i> <?php echo $row['phone_number'] ?></p>
                             <p><i class="fas fa-envelope"></i> <?php echo $row['email'] ?></p>
                         </div>
-                        <a href="editProfile.php" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+                        
                        
                     </header>
                   
@@ -441,7 +395,7 @@ if (mysqli_num_rows($result) > 0) {
                 <div class="row">
                     <div class="col-md-6">
                         <div class="contact-info">
-                            <h3>Address: <?php echo $row['address'] ?></h3>
+                        <h3>Address: <?php echo $row['address'] ?></h3>
                             <h3>Phone: <?php echo $row['phone_number'] ?></h3>
                             <h3>Email: <?php echo $row['email'] ?></h3>
                         </div>
