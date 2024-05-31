@@ -1,37 +1,35 @@
-<?php
-session_start();
-include "db_conn.php";
-// Assuming $user_id contains the user's unique identifier
-$sql = "SELECT * FROM `user_profile` WHERE user_id = '".$_SESSION['user_id']."'";
-$result = mysqli_query($conn, $sql);
+    <?php
+    session_start();
+    include "db_conn.php";
+    // Assuming $user_id contains the user's unique identifier
+    $sql = "SELECT * FROM `user_profile` WHERE user_id = '".$_SESSION['user_id']."'";
+    $result = mysqli_query($conn, $sql);
 
-// Check if the user is not logged in, then redirect to login page
-if (!isset($_SESSION['username'])) {
-    header('Location: loginform.php');
-    exit;
-}
+    // Check if the user is not logged in, then redirect to login page
+    if (!isset($_SESSION['username'])) {
+        header('Location: loginform.php');
+        exit;
+    }
 
-if (mysqli_num_rows($result) > 0) {
-    // Fetch the data
-    $row = mysqli_fetch_assoc($result);
-    // Decode the JSON string for projects
-   
-} else {
-    echo "No user found with ID: " . $user_id;
-}
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User's Name - Personal Homepage</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="profile.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-      
-
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch the data
+        $row = mysqli_fetch_assoc($result);
+        // Decode the JSON string for projects
+       
+    } else {
+        echo "No user found with ID: " . $user_id;
+    }
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User's Name - Personal Homepage</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="profile.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+         <style>
         /* Dark mode styles */
         body.dark-mode {
             background-color: #121212;
@@ -42,7 +40,6 @@ if (mysqli_num_rows($result) > 0) {
             background-color: #333333;
         }
 
-        /* New Toggle Switch Styles */
         .checkbox-wrapper-51 input[type="checkbox"] {
             visibility: hidden;
             display: none;
@@ -213,290 +210,391 @@ if (mysqli_num_rows($result) > 0) {
                 transform: scale(0.6);
             }
         }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .image-container img {
+            max-width: 200px;
+            border-radius: 50%;
+        }
+
+        .information-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .information-container label {
+            font-weight: bold;
+        }
+
+        .information-container input,
+        .information-container textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .section-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            margin-top: 2rem;
+        }
+
+        .education-input,
+        .skill-input,
+        .project-input {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .education-input .educ-item,
+        .skill-input .skill-item,
+        .project-input .project_card {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project_card img {
+            max-width: 100px;
+            border-radius: 8px;
+        }
+
+        .submitBtn {
+            background-color: #185ee0;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submitBtn:hover {
+            background-color: #0045b3;
+        }
     </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <div class="tabs">
-                <!-- Navigation tabs -->
-                <input type="radio" id="radio-1" name="tabs" checked>
-                <label class="tab navbar-brand" for="radio-1" data-target="#profile">Profile</label>
-                <input type="radio" id="radio-2" name="tabs">
-                <label class="tab navbar-brand" for="radio-2" data-target="#education">Education</label>
-                <input type="radio" id="radio-3" name="tabs">
-                <label class="tab navbar-brand" for="radio-3" data-target="#skills">Skills</label>
-                <input type="radio" id="radio-4" name="tabs">
-                <label class="tab navbar-brand" for="radio-4" data-target="#projects">Projects</label>
-                <input type="radio" id="radio-5" name="tabs">
-                <label class="tab navbar-brand ml-auto" for="radio-5" data-target="#contact">Contact Me</label>
-                <span class="glider"></span>
-                <a href="logout.php" class="btn btn-danger btn-lg">Logout</a>
-            </div>
-            <!-- Dark mode toggle -->
-            <div class="dark-mode-toggle checkbox-wrapper-51">
-                <input type="checkbox" id="cbx-51">
-                <label class="toggle" for="cbx-51">
-                    <span>
-                        <svg viewBox="0 0 44 44">
-                            <path d="M22 4.54A17.46 17.46 0 1 0 39.46 22 17.46 17.46 0 0 0 22 4.54z"></path>
-                        </svg>
-                    </span>
-                </label>
-            </div>
-        </div>
-    </nav>
-
-    <form action="submitProfile.php?id=132" method="post" enctype="multipart/form-data">
-    <div class="container-fluid p-0">   
-        <div class="form-container">`
-            <div class="image-container">  
-                <img src="<?php echo $row['image'] ?>" id="image-preview">
-            </div>
-            <input type="file" id="image-input" name="image" accept="image/*">
-            
-            <div class="information-container">
-                <label for="full_name">Full name</label>
-                <input type="text" name="name" id="full_name" value="<?php echo $row['full_name'] ?>" required>
-                <label for="profession">Profession</label>
-                <input type="text" name="profession" id="profession" value="<?php echo $row['profession'] ?>" required>
-                <label for="bio">Bio</label>
-                <textarea name="bio" id="bio" required><?php echo $row['bio'] ?></textarea >
-
-                <label for="address">Address</label>
-                <input type="text" name="address" id="address" value="<?php echo $row['address'] ?>" required>
-                <label for="phone_number" >Phone number</label>
-                <input type="text" name="phoneNumber" id="phone_number" value="<?php echo $row['phone_number'] ?>" required>
-                <label for="email">Email</label>
-                <input type="text" name="email" id="email" value="<?php echo $row['email'] ?>" required>  
-                
-                <div class="divider"></div>
-
-                <div class="section-label">
-                    <span>Education</span>
-                    <button type="button" id="educ-btn">+</button>
-                </div>
-                <div class="education-input">
-
-                    <?php
-                        // Assuming $row['education'] contains the JSON string for education history
-                        $education = json_decode($row['education']);
-                        if (!empty($education)) {
-                          
-                            foreach ($education as $edu) {
-                               
-
-                                echo '<div class="educ-item">';
-                                echo '<input type="text" name="education[]" id="education" value="'.$edu.'">';
-                                echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn" >x</button>';
-                                echo '</div>';
-                            }
-                       
-                        } else {
-            
-                            echo '<div class="educ-item">';
-                            echo '<input type="text" name="education[]" id="education">';
-                            echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn" >x</button>';
-                            echo '</div>';
-                        }
-                    ?>
-           
-                </div>
-            
-
-                <div class="section-label">
-                    <span>Skills</span>
-                    <button type="button" id="skill-btn">+</button>
-                </div>
-                <div class="skill-input">
-                    <?php
-                    // Assuming $row['education'] contains the JSON string for education history
-                    $skill = json_decode($row['skills']);
-                    if (!empty($skill)) {
-                        foreach ($skill as $ski) {
-                            echo '<div class="skill-item">';
-                            echo '<input type="text" name="skill[]" value="'.$ski.'">';
-                            echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn" >x</button>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<div class="skill-item">';
-                        echo '<input type="text" name="skill[]">';
-                        echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn">x</button>';
-                        echo '</div>';
-                    }
-                    ?>
-                </div>
-
-            </div>
-            <div class="divider"></div>
-            <div class="section-label">
-                <span>Project</span>
-                <button type="button" id="project-btn">+</button>
-            </div>
-            <div class="project-input">
-
-            <?php
-                    // Assuming $projects_json contains the JSON string for project data
-                    $projects = json_decode($row['projects'], true);
-
-                    if (!empty($projects)) {
-                        
-                        
-                        foreach ($projects as $project) {
-                            echo '<div class="project_card">';
-                            echo '   <input type="file" id="" name="projectimage[]" accept="image/*" value="'.htmlspecialchars($project['image']).'" >'; // Output the image
-                            echo '   <textarea name="projectDescription[]" id="" placeholder="'.htmlspecialchars($project['description']).'"></textarea>'; // Output the description
-                            echo '</div>';
-                        }
-                        
-                       } else {
-                        // Handle case when there are no projects
-                        echo '<div class="project_card">';
-                        echo '   <input type="file" id="" name="projectimage[]" accept="image/*" >'; // Output the image
-                        echo '   <textarea name="projectDescription[]" id="" placeholder="Project title"></textarea>'; // Output the description
-                        echo '</div>';
-                    }
-            ?> 
-            </div>
-    
-            
-            
-            <button type="submit" style="margin:auto" class="submitBtn">Submit</button>
-         
-        </div>
-    </div>
-</form>
-
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQ=" crossorigin="anonymous"></script>
-    <script>
-
-function removeInput(button) {  
-        var inputItem = button.parentNode;
-        inputItem.parentNode.removeChild(inputItem);
-    }
-
-
-    
-        document.querySelectorAll('.navbar-brand').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('data-target')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('cbx-51');
-
-            document.body.classList.toggle('dark-mode');
-            // document.getElementById('contact').classList.toggle('dark-mode');
-            
-            // Smooth transition for navbar background color
-            const navbar = document.querySelector('.navbar');
-            navbar.style.transition = 'background-color 0.5s ease';
-            navbar.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#343a40' : '#f8f9fa';
-        darkModeToggle.addEventListener('change', function() {
-            document.body.classList.toggle('dark-mode');
-            document.getElementById('contact').classList.toggle('dark-mode');
-            
-            // Smooth transition for navbar background color
-            const navbar = document.querySelector('.navbar');
-            navbar.style.transition = 'background-color 0.5s ease';
-            navbar.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#343a40' : '#f8f9fa';
-        });
-
-
-        const educBtn = document.getElementById('educ-btn');
-        const skillBtn = document.getElementById('skill-btn');;
-        const projectBtn = document.getElementById('project-btn');;
-
+    </head>
+    <body>
         
 
-        educBtn.addEventListener('click', function() {
-            const educationInput = document.querySelector('.education-input');
-            const educItem = document.createElement('div');
-            educItem.classList.add('educ-item');
+        <form action="submitProfile.php" method="post" enctype="multipart/form-data">
 
-            const newInput = document.createElement('input');
-            newInput.setAttribute('type', 'text');
-            newInput.setAttribute('name', 'education[]');
+        <div class="container-fluid p-0">   
+            <div class="form-container">
+                
+                          <label for="profile_picture" class="col-sm-2 col-form-label">Profile picture</label>
+                          <div class="col-sm-10">
+                            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+                          </div>
+                <div class="information-container">
+                    <label for="full_name">Full name</label>
+                    <input type="text" name="name" id="full_name" value="<?php echo $row['full_name'] ?>" required>
+                    <label for="profession">Profession</label>
+                    <input type="text" name="profession" id="profession" value="<?php echo $row['profession'] ?>" required>
+                    <label for="bio">Bio</label>
+                    <textarea name="bio" id="bio" required><?php echo $row['bio'] ?></textarea >
 
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'x';
-            removeBtn.setAttribute('type', 'button');
-            removeBtn.classList.add('remove-skill-btn');
-            removeBtn.addEventListener('click', function() {
-                removeInput(this);
-            });
+                    <label for="address">Address</label>
+                    <input type="text" name="address" id="address" value="<?php echo $row['address'] ?>" required>
+                    <label for="phone_number" >Phone number</label>
+                    <input type="text" name="phoneNumber" id="phone_number" value="<?php echo $row['phone_number'] ?>" required>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" value="<?php echo $row['email'] ?>" required>  
+                    
+                    <div class="divider"></div>
 
-            educItem.appendChild(newInput);
-            educItem.appendChild(removeBtn);
-            educationInput.appendChild(educItem);
-        });
-
-        skillBtn.addEventListener('click', function() {
-            const skillInput = document.querySelector('.skill-input');
-            const newSkillItem = document.createElement('div');
-            newSkillItem.classList.add('skill-item');
-
-            const newInput = document.createElement('input');
-            newInput.setAttribute('type', 'text');
-            newInput.setAttribute('name', 'skill[]');
-
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'x';
-            removeBtn.setAttribute('type', 'button');
-            removeBtn.classList.add('remove-skill-btn');
-            removeBtn.addEventListener('click', function() {
-                removeInput(this);
-            });
-
-            newSkillItem.appendChild(newInput);
-            newSkillItem.appendChild(removeBtn);
-            skillInput.appendChild(newSkillItem);
-        });
-
-        projectBtn.addEventListener('click', function() {
-            const skillInput = document.querySelector('.project-input');
-            const newInput = document.createElement('input');
-            const newInput2 = document.createElement('textarea');
-            newInput.setAttribute('type', 'file');
-            newInput.setAttribute('name', 'projectDescription[]');
-            newInput2.setAttribute('type', 'text');
-            newInput2.setAttribute('accept', 'image/*');
-            newInput2.setAttribute('placeholder', 'Project Description');
-            newInput2.setAttribute('name', 'projectimage[]');
-            skillInput.appendChild(newInput);
-            skillInput.appendChild(newInput2);
-        });
-
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-        const imageInput = document.getElementById('image-input');
-        const imagePreview = document.getElementById('image-preview');
-
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagePreview.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                    <span>Education</span>
+    <button type="button" id="educ-btn">+</button>
+    <div class="education-input">
+        <?php
+            $education = json_decode($row['education'], true); // Decoding JSON string into an associative array
+            if (is_array($education)) {
+                foreach ($education as $edu) {
+                    echo '<div class="educ-item">';
+                    echo '<input type="text" name="degree[]" placeholder="Degree" value="' . (isset($edu['degree']) ? htmlspecialchars($edu['degree']) : '') . '">';
+                    echo '<input type="text" name="institution[]" placeholder="Institution" value="' . (isset($edu['institution']) ? htmlspecialchars($edu['institution']) : '') . '">';
+                    echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn">x</button>';
+                    echo '</div>';
+                }
             } else {
-                imagePreview.src = '';
+                echo '<div class="educ-item">';
+                echo '<input type="text" name="degree[]" placeholder="Degree">';
+                echo '<input type="text" name="institution[]" placeholder="Institution">';
+                echo '<button onclick="removeInput(this)" type="button" class="remove-skill-btn">x</button>';
+                echo '</div>';
+            }
+        ?>
+    </div>
+    
+    <script>
+        document.getElementById('educ-btn').addEventListener('click', function() {
+            var container = document.querySelector('.education-input');
+            var newItem = document.createElement('div');
+            newItem.classList.add('educ-item');
+            newItem.innerHTML = `
+                <input type="text" name="degree[]" placeholder="Degree">
+                <input type="text" name="institution[]" placeholder="Institution">
+                <button type="button" class="remove-skill-btn" onclick="removeInput(this)">x</button>
+            `;
+            container.appendChild(newItem);
+        });
+
+        function removeInput(button) {
+            var item = button.parentElement;
+            item.parentElement.removeChild(item);
+        }
+    </script>
+
+
+<div class="section-label">
+    <span>Skills</span>
+    <button type="button" id="skill-btn">+</button>
+</div>
+<div class="skill-input">
+    <!-- Skills will be dynamically added here -->
+</div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var storedSkills = JSON.parse(localStorage.getItem('skills')) || [];
+            var container = document.querySelector('.skill-input');
+
+            storedSkills.forEach(function(skill) {
+                var newItem = document.createElement('div');
+                newItem.classList.add('educ-item');
+                newItem.innerHTML = `
+                    <input type="text" name="skill[]" value="${skill}" placeholder="Skill">
+                    <button type="button" class="remove-skill-btn" onclick="removeInput(this)">x</button>
+                `;
+                container.appendChild(newItem);
+            });
+        });
+
+        document.getElementById('skill-btn').addEventListener('click', function() {
+            var container = document.querySelector('.skill-input');
+            var newItem = document.createElement('div');
+            newItem.classList.add('educ-item');
+            newItem.innerHTML = `
+                <input type="text" name="skill[]" placeholder="Skill">
+                <button type="button" class="remove-skill-btn" onclick="removeInput(this)">x</button>
+            `;
+            container.appendChild(newItem);
+            updateLocalStorage();
+        });
+
+        function removeInput(button) {
+            var item = button.parentElement;
+            item.parentElement.removeChild(item);
+            updateLocalStorage();
+        }
+
+        function updateLocalStorage() {
+            var skills = [];
+            document.querySelectorAll('.skill-input input[name="skill[]"]').forEach(function(input) {
+                skills.push(input.value);
+            });
+            localStorage.setItem('skills', JSON.stringify(skills));
+        }
+
+        document.addEventListener('input', function(event) {
+            if (event.target.matches('.skill-input input[name="skill[]"]')) {
+                updateLocalStorage();
             }
         });
-    });
-
     </script>
-</body>
-</html>
+
+
+
+                </div>
+                <div class="divider"></div>
+                <div class="section-label">
+                    <span>Project</span>
+                    <button type="button" id="project-btn">+</button>
+                </div>
+                <div class="project-input">
+
+                <?php
+                        // Assuming $projects_json contains the JSON string for project data
+                        $projects = json_decode($row['projects'], true);
+
+                        if (!empty($projects)) {
+                            
+                            
+                            foreach ($projects as $project) {
+                                echo '<div class="project_card">';
+                                echo '   <input type="file" id="" name="projectimage[]" accept="image/*" value="'.htmlspecialchars($project['image']).'" >'; // Output the image
+                                echo '   <textarea name="projectDescription[]" id="" placeholder="'.htmlspecialchars($project['description']).'"></textarea>'; // Output the description
+                                echo '</div>';
+                            }
+                            
+                           } else {
+                            // Handle case when there are no projects
+                            echo '<div class="project_card">';
+                            echo '   <input type="file" id="" name="projectimage[]" accept="image/*" >'; // Output the image
+                            echo '   <textarea name="projectDescription[]" id="" placeholder="Project title"></textarea>'; // Output the description
+                            echo '</div>';
+                        }
+                ?> 
+                </div>
+        
+                
+                
+                <button type="submit" style="margin:auto" class="submitBtn">Submit</button>
+             
+            </div>
+        </div>
+    </form>
+
+        
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQ=" crossorigin="anonymous"></script>
+        <script>
+
+    function removeInput(button) {  
+            var inputItem = button.parentNode;
+            inputItem.parentNode.removeChild(inputItem);
+        }
+
+
+        
+            document.querySelectorAll('.navbar-brand').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('data-target')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('cbx-51');
+
+                document.body.classList.toggle('dark-mode');
+                // document.getElementById('contact').classList.toggle('dark-mode');
+                
+                // Smooth transition for navbar background color
+                const navbar = document.querySelector('.navbar');
+                navbar.style.transition = 'background-color 0.5s ease';
+                navbar.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#343a40' : '#f8f9fa';
+            darkModeToggle.addEventListener('change', function() {
+                document.body.classList.toggle('dark-mode');
+                document.getElementById('contact').classList.toggle('dark-mode');
+                
+                // Smooth transition for navbar background color
+                const navbar = document.querySelector('.navbar');
+                navbar.style.transition = 'background-color 0.5s ease';
+                navbar.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#343a40' : '#f8f9fa';
+            });
+
+
+            const educBtn = document.getElementById('educ-btn');
+            const skillBtn = document.getElementById('skill-btn');;
+            const projectBtn = document.getElementById('project-btn');;
+
+            
+
+            educBtn.addEventListener('click', function() {
+                const educationInput = document.querySelector('.education-input');
+                const educItem = document.createElement('div');
+                educItem.classList.add('educ-item');
+
+                const newInput = document.createElement('input');
+                newInput.setAttribute('type', 'text');
+                newInput.setAttribute('name', 'education[]');
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.setAttribute('type', 'button');
+                removeBtn.classList.add('remove-skill-btn');
+                removeBtn.addEventListener('click', function() {
+                    removeInput(this);
+                });
+
+                educItem.appendChild(newInput);
+                educItem.appendChild(removeBtn);
+                educationInput.appendChild(educItem);
+            });
+
+            skillBtn.addEventListener('click', function() {
+                const skillInput = document.querySelector('.skill-input');
+                const newSkillItem = document.createElement('div');
+                newSkillItem.classList.add('skill-item');
+
+                const newInput = document.createElement('input');
+                newInput.setAttribute('type', 'text');
+                newInput.setAttribute('name', 'skill[]');
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.setAttribute('type', 'button');
+                removeBtn.classList.add('remove-skill-btn');
+                removeBtn.addEventListener('click', function() {
+                    removeInput(this);
+                });
+
+                newSkillItem.appendChild(newInput);
+                newSkillItem.appendChild(removeBtn);
+                skillInput.appendChild(newSkillItem);
+            });
+
+            projectBtn.addEventListener('click', function() {
+                const skillInput = document.querySelector('.project-input');
+                const newInput = document.createElement('input');
+                const newInput2 = document.createElement('textarea');
+                newInput.setAttribute('type', 'file');
+                newInput.setAttribute('name', 'projectDescription[]');
+                newInput2.setAttribute('type', 'text');
+                newInput2.setAttribute('accept', 'image/*');
+                newInput2.setAttribute('placeholder', 'Project Description');
+                newInput2.setAttribute('name', 'projectimage[]');
+                skillInput.appendChild(newInput);
+                skillInput.appendChild(newInput2);
+            });
+
+
+
+            document.addEventListener("DOMContentLoaded", function() {
+            const imageInput = document.getElementById('image-input');
+            const imagePreview = document.getElementById('image-preview');
+
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.src = '';
+                }
+            });
+        });
+
+        </script>
+    </body>
+    </html>
 
 
