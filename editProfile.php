@@ -1,4 +1,4 @@
-    <?php
+<?php
     session_start();
     include "db_conn.php";
     // Assuming $user_id contains the user's unique identifier
@@ -298,15 +298,13 @@
     <body>
         
 
-        <form action="submitProfile.php" method="post" enctype="multipart/form-data">
-
-        <div class="container-fluid p-0">   
-            <div class="form-container">
-                
-                          <label for="profile_picture" class="col-sm-2 col-form-label">Profile picture</label>
-                          <div class="col-sm-10">
-                            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
-                          </div>
+        <form action="submitProfile.php?id=132" method="post" enctype="multipart/form-data">
+    <div class="container-fluid p-0">   
+        <div class="form-container">`
+            <div class="image-container">  
+                <img src="<?php echo $row['image'] ?>" id="image-preview">
+            </div>
+            <input type="file" id="image-input" name="image" accept="image/*">  
                 <div class="information-container">
                     <label for="full_name">Full name</label>
                     <input type="text" name="name" id="full_name" value="<?php echo $row['full_name'] ?>" required>
@@ -367,96 +365,105 @@
     </script>
 
 
-<div class="section-label">
+    <div class="section-label">
     <span>Skills</span>
     <button type="button" id="skill-btn">+</button>
 </div>
 <div class="skill-input">
-    <!-- Skills will be dynamically added here -->
+    <?php
+        $skills = json_decode($row['skills']);
+        if (!empty($skills)) {
+            foreach ($skills as $skill) {
+                echo '<div class="skill-item">';
+                echo '<input type="text" name="skill[]" placeholder="Skill" value="' . htmlspecialchars($skill) . '">';
+                echo '<button type="button" class="remove-skill-btn">x</button>';
+                echo '</div>';
+            }
+        } else {
+            echo '<div class="skill-item">';
+            echo '<input type="text" name="skill[]" placeholder="Skill">';
+            echo '<button type="button" class="remove-skill-btn">x</button>';
+            echo '</div>';
+        }
+    ?>
 </div>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var storedSkills = JSON.parse(localStorage.getItem('skills')) || [];
-            var container = document.querySelector('.skill-input');
+    document.getElementById('skill-btn').addEventListener('click', function() {
+        addSkillInput('');
+    });
 
-            storedSkills.forEach(function(skill) {
-                var newItem = document.createElement('div');
-                newItem.classList.add('educ-item');
-                newItem.innerHTML = `
-                    <input type="text" name="skill[]" value="${skill}" placeholder="Skill">
-                    <button type="button" class="remove-skill-btn" onclick="removeInput(this)">x</button>
-                `;
-                container.appendChild(newItem);
-            });
+    document.querySelectorAll('.remove-skill-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            removeInput(button);
         });
+    });
 
-        document.getElementById('skill-btn').addEventListener('click', function() {
-            var container = document.querySelector('.skill-input');
-            var newItem = document.createElement('div');
-            newItem.classList.add('educ-item');
-            newItem.innerHTML = `
-                <input type="text" name="skill[]" placeholder="Skill">
-                <button type="button" class="remove-skill-btn" onclick="removeInput(this)">x</button>
-            `;
-            container.appendChild(newItem);
-            updateLocalStorage();
+    function addSkillInput(skillValue) {
+        var container = document.querySelector('.skill-input');
+        var newItem = document.createElement('div');
+        newItem.classList.add('skill-item');
+        newItem.innerHTML = `
+            <input type="text" name="skill[]" placeholder="Skill" value="${skillValue}">
+            <button type="button" class="remove-skill-btn">x</button>
+        `;
+        container.appendChild(newItem);
+
+        // Attach event listener for the new remove button
+        newItem.querySelector('.remove-skill-btn').addEventListener('click', function() {
+            removeInput(newItem.querySelector('.remove-skill-btn'));
         });
+    }
 
-        function removeInput(button) {
-            var item = button.parentElement;
-            item.parentElement.removeChild(item);
-            updateLocalStorage();
-        }
+    function removeInput(button) {
+        var item = button.parentElement;
+        item.parentElement.removeChild(item);
+    }
+</script>
 
-        function updateLocalStorage() {
-            var skills = [];
-            document.querySelectorAll('.skill-input input[name="skill[]"]').forEach(function(input) {
-                skills.push(input.value);
-            });
-            localStorage.setItem('skills', JSON.stringify(skills));
-        }
-
-        document.addEventListener('input', function(event) {
-            if (event.target.matches('.skill-input input[name="skill[]"]')) {
-                updateLocalStorage();
-            }
-        });
-    </script>
 
 
 
                 </div>
                 <div class="divider"></div>
-                <div class="section-label">
-                    <span>Project</span>
-                    <button type="button" id="project-btn">+</button>
-                </div>
-                <div class="project-input">
+<div class="section-label">
+    <span>Project</span>
+    <button type="button" id="project-btn">+</button>
+</div>
+<div class="project-input">
+    <!-- Project items will be dynamically added here -->
+</div>
 
-                <?php
-                        // Assuming $projects_json contains the JSON string for project data
-                        $projects = json_decode($row['projects'], true);
+<script>
+    // Counter for unique IDs
+    var projectCounter = 0;
 
-                        if (!empty($projects)) {
-                            
-                            
-                            foreach ($projects as $project) {
-                                echo '<div class="project_card">';
-                                echo '   <input type="file" id="" name="projectimage[]" accept="image/*" value="'.htmlspecialchars($project['image']).'" >'; // Output the image
-                                echo '   <textarea name="projectDescription[]" id="" placeholder="'.htmlspecialchars($project['description']).'"></textarea>'; // Output the description
-                                echo '</div>';
-                            }
-                            
-                           } else {
-                            // Handle case when there are no projects
-                            echo '<div class="project_card">';
-                            echo '   <input type="file" id="" name="projectimage[]" accept="image/*" >'; // Output the image
-                            echo '   <textarea name="projectDescription[]" id="" placeholder="Project title"></textarea>'; // Output the description
-                            echo '</div>';
-                        }
-                ?> 
-                </div>
+    // Function to add a new project item
+    function addProjectItem() {
+        var container = document.querySelector('.project-input');
+        var newItem = document.createElement('div');
+        newItem.classList.add('project_card');
+        newItem.innerHTML = `
+            <input type="file" id="project_image_${projectCounter}" name="projectimage[]" accept="image/*">
+            <textarea name="projectDescription[]" placeholder="Project description"></textarea>
+            <button type="button" class="remove-project-btn" onclick="removeProjectItem(this)">Remove</button>
+        `;
+        container.appendChild(newItem);
+        projectCounter++;
+    }
+
+    // Function to remove a project item
+    function removeProjectItem(button) {
+        var item = button.parentElement;
+        item.parentElement.removeChild(item);
+    }
+
+    // Event listener for adding a new project item
+    document.getElementById('project-btn').addEventListener('click', function() {
+        addProjectItem();
+    });
+</script>
+
         
                 
                 

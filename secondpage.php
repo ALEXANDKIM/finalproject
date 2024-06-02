@@ -29,27 +29,19 @@ if (mysqli_num_rows($result) > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        /* Set height of the profile section to fill the viewport */
+        /* Set height of the sections to fill the viewport */
         #profile,
         #education,
         #skills,
-        #projects {
+        #projects,
+        #contact {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-        }
-
-        /* Set height of the contact section to fill the viewport */
-        #contact {
-            min-height: 100vh;
-            background-color: #151515; /* Set your desired background color */
-            color: white;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         /* Center the headers */
@@ -59,12 +51,11 @@ if (mysqli_num_rows($result) > 0) {
 
         /* Style the user's name and profession */
         .user-name {
-    font-size: 3.5em;
-    font-weight: bold;
-    margin-bottom: 0.1em;
-    white-space: nowrap; /* Ensure username stays on one line */
-}
-
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 0.1em;
+            white-space: nowrap; /* Ensure username stays on one line */
+        }
 
         .user-profession {
             font-size: 2.2em;
@@ -97,14 +88,12 @@ if (mysqli_num_rows($result) > 0) {
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 0.5em;
-
         }
 
         .contact-info p {
             font-size: 0.9em;
             margin-bottom: 1em;
-white-space: nowrap; /* Ensure username stays on one line */
-            
+            white-space: nowrap; /* Ensure contact info stays on one line */
         }
 
         .contact-info i {
@@ -121,105 +110,173 @@ white-space: nowrap; /* Ensure username stays on one line */
             margin-right: 5px;
         }
 
-     .blur-bg {
-    background-image: url('your-blurred-background-image.jpg');
-    background-size: cover;
-    backdrop-filter: blur(8px); /* Adjust blur intensity as needed */
-    -webkit-backdrop-filter: blur(8px); /* For Safari */
-}
-   
-/* Your existing CSS styles */
-    .blur-bg {
-        background-image: url('your-blurred-background-image.jpg');
-        background-size: cover;
-        backdrop-filter: blur(8px); /* Adjust blur intensity as needed */
-        -webkit-backdrop-filter: blur(8px); /* For Safari */
-    }
-    
-    /* Styling for the navigation labels */
-    .navbar-brand {
-        color: white; /* Text color */
-        font-size: 18px; /* Font size */
-        font-weight: bold; /* Font weight */
-        margin-right: 20px; /* Spacing between labels */
-        cursor: pointer; /* Cursor style */
-        transition: color 0.3s; /* Smooth color transition */
-    }
+        .blur-bg {
+            background-size: cover;
+            backdrop-filter: blur(8px); /* Adjust blur intensity as needed */
+            -webkit-backdrop-filter: blur(8px); /* For Safari */
+        }
 
-    /* Hover effect for the navigation labels */
-    .navbar-brand:hover {
-        color: #ffc107; /* Change color on hover */
-    }
+        /* Styling for the navigation labels */
+        .navbar-brand {
+            color: white; /* Text color */
+            font-size: 18px; /* Font size */
+            font-weight: bold; /* Font weight */
+            margin-right: 20px; /* Spacing between labels */
+            cursor: pointer; /* Cursor style */
+            transition: color 0.3s; /* Smooth color transition */
+        }
 
-    /* Additional styling for the logout button */
-    .btn-logout {
-        color: white;
-        background-color: #dc3545;
-        border: none;
-        font-size: 16px;
-        font-weight: bold;
-        padding: 10px 20px;
-        margin-left: 20px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+        /* Hover effect for the navigation labels */
+        .navbar-brand:hover {
+            color: #ffc107; /* Change color on hover */
+        }
 
-    /* Hover effect for the logout button */
-    .btn-logout:hover {
-        background-color: #c82333; /* Darker shade of red on hover */
-    }
+        /* Additional styling for the logout button */
+        .btn-logout {
+            color: white;
+            background-color: #dc3545;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    .profile-section {
-    background-image: url('your-cool-background-image.jpg');
-    background-size: cover;
-    background-position: center;
-    padding: 50px 0; /* Add some padding to the section if needed */
-}
-.content {
-    background-image: url('your-cool-background-image.jpg');
-    background-size: cover;
-    background-position: center;
-    padding: 50px 0; /* Add some padding to the section if needed */
-}
+        /* Hover effect for the logout button */
+        .btn-logout:hover {
+            background-color: #c82333; /* Darker shade of red on hover */
+        }
 
+        .profile-section {
+            background-image: url('your-cool-background-image.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0; /* Add some padding to the section if needed */
+        }
 
-body {
+        body {
+            cursor: none;
+            margin: 0; /* Remove default margin */
+        }
 
-    cursor: none;
-}
-body h1 {
-    color: #fff;
-    font-family: "Protest Riot", sans-serif;
-    font-size: 60px;
-}
-.cursor {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: deepskyblue;
-    mix-blend-mode: difference;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, background-color 0.3s;
-    animation: glow 1s infinite alternate;
-}
-@keyframes glow {
-    0% {
-        box-shadow: 0 0 10px 5px rgba(0, 191, 255, 0.5);
-    }
-    100% {
-        box-shadow: 0 0 20px 10px rgba(0, 191, 255, 0.9);
-    }
-}
+        body h1 {
+            color: #fff;
+            font-family: "Protest Riot", sans-serif;
+            font-size: 60px;
+        }
 
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: deepskyblue;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            animation: glow 1s infinite alternate;
+        }
 
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px 5px rgba(0, 191, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px 10px rgba(0, 191, 255, 0.9);
+            }
+        }
 
+        /* Profile section specific styles */
+        #profile {
+            position: relative;
+            padding: 40px 0; /* Adjust padding as needed */
+            background-color: transparent; /* Fallback background color */
+            background-image: url('img/skills.jpg'); /* Specify the path to your background image */
+    background-size: cover; /* Cover the entire element with the background image */
+    background-position: bottom right; /* Align image to the top-left */
+    /* Other options:
+       background-position: top right;
+       background-position: bottom left;
+       background-position: bottom right;
+    */
+        }
+
+        #background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the entire section */
+            z-index: -1; /* Ensure the video is behind other content */
+        }
+
+        .profile-image-container {
+            border: 2px solid blue; /* Blue border */
+            border-radius: 50%; /* Circular shape */
+            width: 150px; /* Adjust the size as needed */
+            height: 150px;
+            overflow: hidden; /* Hide overflow to keep the circle shape */
+            margin: 0 auto; /* Center the image */
+        }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+        }
+
+        .blue-border {
+            border: 3px solid #31304D; /* Blue border color */
+            padding: 3px; /* Adjust padding if needed */
+        }
+
+        .custom-card {
+            background-color: transparent !important;
+            border: none;
+        }
+
+        .list-group {
+            background-color: transparent;
+            border: none; /* Remove any border */
+        }
+
+        .list-group-item {
+            background-color: transparent;
+            border: none; /* Remove any border */
+            margin-bottom: -16px; /* Adjust the bottom margin as needed */
+        }
+
+        .btn-custom {
+            background-color: transparent; /* Specify your desired color */
+            border-color: transparent; /* Specify your desired color */
+        }
+
+        .btn-custom:hover {
+            background-color: transparent; /* Specify your desired hover color */
+            border-color: #31304D; /* Specify your desired hover color */
+        }
+
+        /* Updated font and font size */
+        .text-center,
+        .text-muted {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+        }
+
+        .list-group-item strong {
+            font-family: Arial, sans-serif;
+            font-size: 25px;
+        }
+
+        .list-group-item p {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+        }
     </style>
-
-
-
-
     <script>
         document.addEventListener('mousemove', e => {
             const cursor = document.querySelector('.cursor');
@@ -227,104 +284,108 @@ body h1 {
             cursor.style.top = e.pageY + 'px';
         });
     </script>
-
+</head>
+<body>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top blur-bg">
-    <div class="container">
-
-        <div class="tabs">
-            <!-- Navigation tabs without checkboxes -->
-            <label class="tab navbar-brand" data-target="#profile">Profile</label>
-            <label class="tab navbar-brand" data-target="#education">Education</label>
-            <label class="tab navbar-brand" data-target="#skills">Skills</label>
-            <label class="tab navbar-brand" data-target="#projects">Projects</label>
-            <label class="tab navbar-brand ml-auto" data-target="#contact">Contact Me</label>
-            <a target="_blank" href="publicView.php?user_id=<?php echo $_SESSION['user_id']?>"><label>Public View</label></a>
-            <a href="logout.php" class="btn btn-danger btn-lg">Logout</a>
-            <span class="glider"></span>
+        <div class="container">
+            <div class="tabs">
+                <!-- Navigation tabs without checkboxes -->
+                <label class="tab navbar-brand" data-target="#profile">Profile</label>
+                <label class="tab navbar-brand" data-target="#education">Education</label>
+                <label class="tab navbar-brand" data-target="#skills">Skills</label>
+                <label class="tab navbar-brand" data-target="#projects">Projects</label>
+                <label class="tab navbar-brand ml-auto" data-target="#contact">Contact Me</label>
+                <a target="_blank" href="publicView.php?user_id=<?php echo $_SESSION['user_id']?>"><label>Public View</label></a>
+                <a href="logout.php" class="btn btn-danger btn-lg">Logout</a>
+                <span class="glider"></span>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
+    <section class="content">
+        <section id="profile">
+            <div class="container-fluid">
+                <?php
+                // Check for error messages (from both GET and session)
+                if (isset($_GET['error'])) {
+                    $error_message = urldecode($_GET['error']);
+                    echo "<div class='alert alert-danger'>$error_message</div>";
+                } elseif (isset($_SESSION['user_pass_error'])) {
+                    $error_message = $_SESSION['user_pass_error'];
+                    echo "<div class='alert alert-danger'>$error_message</div>";
+                    unset($_SESSION['user_pass_error']);  // Clear session error
+                }
 
-<style>
-    #profile {
-padding: 40px 0; /* Adjust padding as needed */
-            background-color: #F0ECE5; /* Background color for skills section */
-        }
-    .profile-image-container {
-  border: 2px solid blue; /* Blue border */
-  border-radius: 50%; /* Circular shape */
-  width: 150px; /* Adjust the size as needed */
-  height: 150px;
-  overflow: hidden; /* Hide overflow to keep the circle shape */
-  margin: 0 auto; /* Center the image */
+                // Check for success messages (from both GET and session)
+                if (isset($_GET['success'])) {
+                    $success_message = urldecode($_GET['success']);
+                    echo "<div class='alert alert-success'>$success_message</div>";
+                }
+                ?>
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <div class="card card-primary card-outline mx-auto bg-transparent custom-card">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <style>
+                                        .profile-pic {
+    width: 150px; /* Adjust the size as needed */
+    height: 150px;
+    border-radius: 50%; /* Make it a circle */
+    border: 2px solid black; /* Black border */
 }
 
-.profile-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Maintain aspect ratio and cover the container */
-}
+                                    </style>
+                                    <img src="<?php echo !empty($row['image']) ? $row['image'] : 'img/profile.png' ?>" alt="Profile Picture" class="profile-pic">
 
-.blue-border {
-    border: 3px solid #31304D; /* Blue border color */
-    padding: 3px; /* Adjust padding if needed */
-}
-
-.custom-card {
-        background-color: transparent !important;
-        border: none;
-    }
-
-</style>
-    <!-- Main content -->
-<section class="content">
-  <section id="profile">
-    <div class="container-fluid">
-      <?php
-      // Check for error messages (from both GET and session)
-      if (isset($_GET['error'])) {
-        $error_message = urldecode($_GET['error']);
-        echo "<div class='alert alert-danger'>$error_message</div>";
-      } elseif (isset($_SESSION['user_pass_error'])) {
-        $error_message = $_SESSION['user_pass_error'];
-        echo "<div class='alert alert-danger'>$error_message</div>";
-        unset($_SESSION['user_pass_error']);  // Clear session error
-      }
-
-      // Check for success messages (from both GET and session)
-      if (isset($_GET['success'])) {
-        $success_message = urldecode($_GET['success']);
-        echo "<div class='alert alert-success'>$success_message</div>";
-      }
-      ?>
-      <div class="row justify-content-center">
-    <div class="col-md-3">
-        <div class="card card-primary card-outline mx-auto bg-transparent custom-card">
-            <div class="card-body box-profile">
-                <div class="text-center">
-                    <?php
-                    // Check if the user has a profile picture
-                    if (!empty($row['profile_picture'])) {
-                        echo '<img class="profile-user-img img-fluid rounded-circle blue-border" src="data:image/jpeg;base64,'.base64_encode($row['profile_picture']) . '" alt="User profile picture" width="150" height="150">';
-                    } else {
-                        echo '<img class="profile-user-img img-fluid rounded-circle blue-border" src="img\profile.png" alt="Blank profile picture" width="150" height="150">';
-                    }
-                    ?>
+                                </div>
+                                <h3 class="profile-username text-center" style="font-family: Arial, sans-serif; font-size: 35px; margin-top: 20px;">
+                                    <strong><?php echo $row['full_name'] ?></strong><span></span>
+                                </h3>
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <div class="text-center">
+                                            <i></i> <strong><?php echo !empty($row['profession']) ? $row['profession'] : 'No profession specified' ?></strong>
+                                        </div>
+                                        <a class="float-right"></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="text-center">
+                                            <strong><i class=""></i></strong>
+                                            <p class="text-muted"><?php echo $row['bio'] ?></p>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-phone"></i> <?php echo !empty($row['phone_number']) ? $row['phone_number'] : 'No phone number provided' ?>
+                                        <a class="float-right"></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-map-marker-alt"></i> <?php echo !empty($row['address']) ? $row['address'] : 'No address specified' ?>
+                                        <a class="float-right"></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-envelope"></i> <?php echo !empty($row['email']) ? $row['email'] : 'No email available' ?>
+                                        <a class="float-right"></a>
+                                    </li>
+                                </ul>
+                                <div class="col-12">
+                                    <a href="editProfile.php" class="btn btn-custom btn-block">Edit Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Rest of the profile content -->
+            </div>
 
-
-              <h3 class="profile-username text-center" style="font-family: Arial, sans-serif; font-size: 35px; margin-top: 20px;">
-    <strong><?php echo $row['full_name'] ?></strong><span></span>
-</h3>
 
 
 
 <style>
+
     .list-group {
         background-color: transparent;
         border: none; /* Remove any border */
+
     }
 
     .list-group-item {
@@ -333,7 +394,7 @@ padding: 40px 0; /* Adjust padding as needed */
     }
 
     .btn-custom {
-        background-color: #F0ECE5; /* Specify your desired color */
+        background-color: #transparent; /* Specify your desired color */
         border-color: #; /* Specify your desired color */
     }
 
@@ -384,48 +445,6 @@ padding: 40px 0; /* Adjust padding as needed */
 </style>
 
 
-<ul class="list-group list-group-unbordered mb-3">
-    <li class="list-group-item">
-        <div class="text-center">
-            <i></i> <strong><?php echo !empty($row['profession']) ? $row['profession'] : 'No profession specified' ?></strong>
-        </div>
-        <a class="float-right"></a>
-    </li>
-    <li class="list-group-item">
-        <div class="text-center"> <!-- Add this div for center alignment -->
-            <strong><i class=""></i></strong>
-            <p class="text-muted"><?php echo $row['bio'] ?></p>
-        </div>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-phone"></i> <?php echo !empty($row['phone_number']) ? $row['phone_number'] : 'No phone number provided' ?>
-        <a class="float-right"></a>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-map-marker-alt"></i> <?php echo !empty($row['address']) ? $row['address'] : 'No address specified' ?>
-        <a class="float-right"></a>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-envelope"></i> <?php echo !empty($row['email']) ? $row['email'] : 'No email available' ?>
-        <a class="float-right"></a>
-    </li>
-</ul>
-
-    
-              <div class="col-12">
-    <a href="editProfile.php" class="btn btn-custom btn-block">Edit Profile</a>
-</div>
-
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
   </section>
 </section>
 
@@ -437,6 +456,14 @@ padding: 40px 0; /* Adjust padding as needed */
            #education {
             padding: 40px 0; /* Adjust padding as needed */
             background-color: #B6BBC4; /* Background color for education section */
+            background-image: url('img/2.jpg'); /* Specify the path to your background image */
+    background-size: cover; /* Cover the entire element with the background image */
+     background-position: 100px 50px; /* Adjust these values to move the image */
+    /* Other options:
+       background-position: top right;
+       background-position: bottom left;
+       background-position: bottom right;
+    */
         }
 
         #education h2 {
@@ -459,6 +486,8 @@ padding: 40px 0; /* Adjust padding as needed */
         #education .card p {
             margin: 0;
         }
+
+
         </style>
         <div id="education">
         <div class="container">
@@ -488,7 +517,7 @@ padding: 40px 0; /* Adjust padding as needed */
     padding: 100px 0; /* Adjust padding as needed */
     
     color: white; /* Text color */
-     background-image: url('img/home.pn'); /* Specify the path to your background image */
+     background-image: url('img/skills.jpg'); /* Specify the path to your background image */
     background-size: cover; /* Cover the entire element with the background image */
     background-position: center; /* Center the background image */
 }
@@ -550,63 +579,64 @@ padding: 40px 0; /* Adjust padding as needed */
 </style>
 
     <div id="skills">
-        <div class="container">
-            <h2>My Skills</h2>
-            <div class="skills-grid">
-                <?php
-                // Assuming $row['skills'] contains the JSON string for skills
-                $skills = json_decode($row['skills']);
-                if (!empty($skills)) {
-                    foreach ($skills as $skill) {
-                        echo '<div class="skill-card">';
-                        echo '<div class="card-body">';
-                        echo '<p class="card-text">' . htmlspecialchars($skill) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                } else {
-                    echo "<p>No skills available.</p>";
+    <div class="container">
+        <h2>My Skills</h2>
+        <div class="skills-grid">
+            <?php
+            // Assuming $row['skills'] contains the JSON string for skills
+            $skills = json_decode($row['skills']);
+            if (!empty($skills)) {
+                foreach ($skills as $skill) {
+                    echo '<div class="skill-card">';
+                    echo '<div class="card-body">';
+                    echo '<p class="card-text">' . htmlspecialchars($skill) . '</p>';
+                    echo '</div>';
+                    echo '</div>';
                 }
-                ?>
-            </div>
+            } else {
+                echo "<p>No skills available.</p>";
+            }
+            ?>
         </div>
     </div>
+</div>
+
 
 
 <style>
-    
     #projects {
-            padding: 100px 0; /* Adjust padding as needed */
-            background-color: #161A30; /* Background color for skills section */
-        }
+        padding: 100px 0; /* Adjust padding as needed */
+         color: white; /* Text color */
+        background-color: #161A30; /* Background color for projects section */
+    }
+    .project_card {
+        margin-bottom: 20px; /* Adjust spacing between project cards */
+    }
+    .project_card img {
+        max-width: 100%; /* Ensure images don't exceed container width */
+        height: auto; /* Maintain aspect ratio */
+    }
 </style>
-        <div id="projects">
-            <div class="container">
-                <h2>Projects</h2>
-                <div class="project-card">
-                <?php
-                    // Assuming $projects_json contains the JSON string for project data
-                    $projects = json_decode($row['projects'], true);
-
-                    if (!empty($projects)) {
-                        
-                        
-                        foreach ($projects as $project) {
-                            echo '<div class="project_card">';
-                            echo '<img src="'.htmlspecialchars($project['image']).'" alt="">'; // Output the image
-                            echo '<span>'.htmlspecialchars($project['description']).'</span>'; // Output the description
-                            echo '</div>';
-                        }
-                        
-   
-                    } else {
-                        // Handle case when there are no projects
-                        echo 'No projects found.';
-                    }
-                    ?> 
-                </div>
-            </div>
+<div id="projects">
+    <div class="container">
+        <h2>Projects</h2>
+        <div class="project-card">
+           <?php
+// Assuming $profile_picture contains the profile picture content retrieved from the database
+if (!empty($profile_picture)) {
+    // Convert profile picture content to base64 format
+    $profile_picture_base64 = base64_encode($profile_picture);
+    // Output the image using the base64-encoded content
+    echo '<img src="data:image/jpeg;base64,' . $profile_picture_base64 . '" alt="Profile Picture">';
+} else {
+    // Display a placeholder image if no profile picture is available
+    echo '<img src="placeholder.jpg" alt="Placeholder Image">';
+}
+?>
         </div>
+    </div>
+</div>
+
         <style>
 
             #contact {
